@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var User = require('../models/user');
-
+var Interests = require('../models/Interests')
 
 
 
@@ -18,7 +18,9 @@ router.post('/authenticate', function(req, res) {
       res.status(400)
       res.send(err);
     } else {
-      res.cookie('CPHCookie', token).send('OK');
+      console.log('res.cookie is:', token);
+      res.cookie('CPHCookie', token)
+      res.send('OK Cookie?');
     }
   });
 });
@@ -46,7 +48,7 @@ router.use(function(req, res, next) {
   } catch(e) {
     res.clearCookie('CPHCookie') // Remove a particular cookie
     res.status('401'); // Unauthorized
-    res.send(err)
+    res.send('Baaaad cookie')
     return
   }
   next()
@@ -54,6 +56,13 @@ router.use(function(req, res, next) {
 
 // If we get here the middleware varified we are good to go
 router.post('/interest', function(req, res) {
+
+  User.addInterest(req.body, function(err) {
+    res.status(err ? 400 : 200).send(err);
+  });
+});
+
+router.get('/interest', function(req, res) {
 
   User.addInterest(req.body, function(err) {
     res.status(err ? 400 : 200).send(err);

@@ -31,7 +31,7 @@ userSchema.statics.authenticate = function(userObj, cb) {
 
       // Create a JWT token
       var token = jwt.encode(payload, JWT_SECRET);
-
+      console.log('DEEP Down in model, cookie is:', token);
       cb(null, token);
     });
   });
